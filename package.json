@@ -1,0 +1,11 @@
+{
+  "name": "Almabase_Project",
+  "version": "1.0.0",
+  "description": "A demo project for internship role",
+  "main": "index.js",
+  "author": "Prateek93a",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
