@@ -35,10 +35,11 @@ body{
     font-size: small;
 }
 
-.results{
-    display: hidden;
+.result{
+    visibility: hidden;
 }
-
-.results .result-list{
+/*
+.result .result-list{
     max-height: 20vh;
-}
+    overflow-y: scroll;
+}*/

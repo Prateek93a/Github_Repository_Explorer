@@ -5,14 +5,31 @@ let repoCountInput;
 let committerCountInput;
 let errorMessageSpan;
 
-const repoQuery = (orgName) => `https://api.github.com/orgs/${orgName}/repos?type=forks`
+const repoQuery = (orgName) => `https://api.github.com/orgs/${orgName}/repos`
 const committerQuery = (orgName) => `https://api.github.com/orgs/${orgName}/repos`
 
 const fetchRepos = (orgName) => fetch(repoQuery(orgName));
 const fetchCommitters = (orgName) => fetch(committerQuery(orgName));
 
-const updateUI = (repos, committers) => {
-
+const updateUI = (repos = [], committers = []) => {
+    resultsSection.style.visibility = 'visible';
+    formButton.disabled = false;
+    let repoListString = '<ul>';
+    for (let i = 0; i < repos.length; i++) {
+        repoListString += `<li>${repos[i].name}</li>\n`;
+    }
+    repoListString += '</ul>';
+    let committerListString = '<ul>';
+    for (let i = 0; i < committers.length; i++) {
+        committerListString += `<li>${committers[i].name}</li>\n`;
+    }
+    committerListString += '</ul>';
+    console.log(repoListString);
+    document.getElementById('repo-list').innerHTML = repoListString;
+    document.getElementById('committer-list').innerHTML = committerListString;
+    document.getElementById('repo-header').innerText = 'Repositories';
+    document.getElementById('committer-header').innerText = 'Committers';
+    formButton.innerText = 'Search';
 }
 
 const formSubmitAction = async (event) => {
@@ -22,14 +39,16 @@ const formSubmitAction = async (event) => {
         return;
     }
     errorMessageSpan.innerText = '';
-    console.log('request submitted');
+    formButton.innerText = 'Please wait';
+    await fetch(`/api?org=${orgNameInput.value}&repo=${repoCountInput.value}&committer=${committerCountInput.value}`);
+    //formButton.disabled = true;
+    //console.log('request submitted');
 
-    let repos = await fetchRepos(orgNameInput.value);
-    repos = await repos.json();
-    let committers = await fetchCommitters(orgNameInput.value);
-    committers = await committers.json();
-
-    console.log(repos);
+    //let repos = await fetchRepos(orgNameInput.value);
+    //repos = await repos.json();
+    //let committers = await fetchCommitters(orgNameInput.value);
+    //committers = await committers.json();
+    //updateUI(repos, committers);
 }
 
 const documentLoadAction = () => {
