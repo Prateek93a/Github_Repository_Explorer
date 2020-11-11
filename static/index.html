@@ -7,9 +7,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="index.css">
-    <!-- Compiled and minified JavaScript -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="index.js"></script>
 
     <title>Almabase Project</title>
 </head>
@@ -24,6 +23,33 @@
             </a>
         </div>
     </nav>
+
+    <!-- Form -->
+    <div class="form container">
+        <div class="row">
+            <form id="form-elem" class="col s12">
+                <div class="row">
+                    <div class="input-div col s12 m4">
+                        <input id="org-elem" class="text-input" placeholder="Enter organisation name..." type="text"
+                            class="validate">
+                    </div>
+                    <div class="input-div col s6 m3">
+                        <input id="repo-elem" class="text-input" placeholder="Enter number of repositories..."
+                            type="text" class="validate">
+                    </div>
+                    <div class="input-div col s6 m3">
+                        <input id="committer-elem" class="text-input" placeholder="Enter number of committers..."
+                            type="text" class="validate">
+                    </div>
+                    <div class="col s12 m2">
+                        <a id="form-submit" class="waves-effect waves-light btn">Search</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
 </body>
 
 </html>

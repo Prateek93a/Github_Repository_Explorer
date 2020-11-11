@@ -5,8 +5,27 @@ body{
 }
 
 .navbar{
-    height: 10vh;
+    height: 8vh;
     padding-top: 1rem;
     padding-bottom: 1rem;
     z-index: 0 !important;
+}
+
+.form{
+    height: 15vh;
+    background-color: beige;
+    padding-top: 6vh;
+    padding-bottom: 2vh;
+}
+
+.form .input-div{
+    border-style: solid !important;
+    border-radius: 4%;
+    border-width: thin;
+    border-color: rgb(58, 58, 58);
+}
+
+.form .input-text{
+    margin-right: 20px;
+    border-bottom: none !important;
 }
