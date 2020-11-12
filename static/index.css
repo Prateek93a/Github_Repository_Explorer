@@ -38,8 +38,3 @@ body{
 .result{
     visibility: hidden;
 }
-/*
-.result .result-list{
-    max-height: 20vh;
-    overflow-y: scroll;
-}*/

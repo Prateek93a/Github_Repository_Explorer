@@ -49,8 +49,8 @@ const updateUI = (response = [], hasErrored = false, errorMessage = '') => {
     // update the UI
     document.getElementById('response').innerHTML = uiString;
     resultsSection.style.visibility = 'visible';
-    formButton.disabled = false;
     formButton.innerText = 'Search';
+    formButton.classList.remove('disabled');
 }
 
 // function to handle form submit action
@@ -73,7 +73,9 @@ const formSubmitAction = async (event) => {
         return;
     }
 
-    formButton.innerText = 'Please wait';
+    // disable the button
+    formButton.innerText = 'Loading';
+    formButton.classList.add('disabled');
 
     try {
         // fetch the data

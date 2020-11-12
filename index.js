@@ -47,7 +47,7 @@ app.get('/api', cors(), async (req, res) => {
         const committersData = topCommittersByCommits(committerResponse, committerCount);
         console.log('committers fetched');
 
-        // 
+        // zip repository with corresponding contributors together and push into responseArr
         for (let i = 0; i < repos.length; i++) {
             responseArr.push({ repo: repos[i], committers: committersData[i] });
         }
