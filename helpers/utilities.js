@@ -2,44 +2,42 @@
 const topReposByForks = (data, repoCount) => {
     // extracting name and number of forks
     let repos = data.map(repo => ({ name: repo.name, forks: repo.forks_count }));
+
     // sorting based on number of forks
     repos.sort((a, b) => b.forks - a.forks);
-    // fetching top 'repoCount' number of repositories
-    if (repos.length > repoCount) return repos.slice(0, repoCount);
-    return repos;
 
+    // fetching top 'repoCount' number of repositories
+    return repos.slice(0, repoCount);
 }
 
 // utility function to fetch top 'committerCount' contributors per repository based on commits
-const topCommittersByCommits = (resdata, committerCount) => {
+const topContributorsByCommits = (contributors, contributorCount) => {
     // extracting data variable containing contributors info per repository
-    const res = resdata.map(({ data }) => data);
+    contributors = contributors.map(({ data }) => data);
+
     // extracting name and commits of contributors per repository
-    let committers = res.map(committer => committer.map(data => ({
+    contributors = contributors.map(contributor => contributor.map(data => ({
         name: data.login,
         commits: data.contributions
     })));
-    // fetching top 'committerCount' number of contributors per repository
-    committers = committers.map(arr => {
-        if (arr.length > committerCount) {
-            arr = arr.slice(0, committerCount);
-        }
-        return arr;
-    });
-    return committers;
+
+    // fetching and returning top 'contributorCount' number of contributors per repository
+    return contributors.map(arr => arr.slice(0, contributorCount));
 }
 
 // utility function to check the validity of request parameters
-const checkIfValid = (orgName, repoCount, committerCount) => {
+const checkIfValid = (orgName, repoCount, contributorCount) => {
     // checking if some variable is empty
-    if (!orgName || !repoCount || !committerCount) {
+    if (!orgName || !repoCount || !contributorCount) {
         return false;
     }
-    // checking if repoCount and committerCount are valid numbers or not
-    if (Number.isNaN(Number(repoCount)) || Number.isNaN(Number(committerCount))) {
+
+    // checking if repoCount and contributorCount are valid numbers or not
+    if (Number.isNaN(Number(repoCount)) || Number.isNaN(Number(contributorCount))) {
         return false;
     }
+
     return true;
 }
 
-module.exports = { topReposByForks, topCommittersByCommits, checkIfValid };
+module.exports = { topReposByForks, topContributorsByCommits, checkIfValid };

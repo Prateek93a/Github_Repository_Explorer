@@ -1,23 +1,29 @@
 // for displaying the result of fetch request
 let resultsSection;
+
 // for triggering formSubmitAction function click 
 let formButton;
+
 // for input value of organisation input text box
 let orgNameInput;
+
 // for input value of repository count input number box
 let repoCountInput;
-// for input value of committers count input number box
-let committerCountInput;
+
+// for input value of contributors count input number box
+let contributorCountInput;
+
 // for handling error messages
 let errorMessageSpan;
 
 // function to check validity of inputs
-const isValid = (orgName, repoCount, committerCount) => {
+const isValid = (orgName, repoCount, contributorCount) => {
     // checking if some variable is empty
-    if (!orgName || !repoCount || !committerCount) {
+    if (!orgName || !repoCount || !contributorCount) {
         return false;
     }
-    // repoCount and committerCount are numbers because the input type of html element is number
+
+    // repoCount and contributorCount are numbers because the input type of html element is number
     return true;
 }
 
@@ -33,12 +39,12 @@ const updateUI = (response = [], hasErrored = false, errorMessage = '') => {
     else {
         // map the response object to display the every repository with corresponding contributors
         uiString = response.map(row => {
-            const { repo, committers } = row;
+            const { repo, contributors } = row;
             let rowString = '<div class="col s12">\n';
             rowString += `<h4>${repo.name}: #${repo.forks} Forks </h4>\n`;
             rowString += '<ul>\n';
-            for (committer of committers) {
-                rowString += `<li>${committer.name}: #${committer.commits} Commits</li>\n`
+            for (contributor of contributors) {
+                rowString += `<li>${contributor.name}: #${contributor.commits} Commits</li>\n`
             }
             rowString += '</ul>\n';
             rowString += '</div>';
@@ -65,10 +71,10 @@ const formSubmitAction = async (event) => {
     // extract the user input
     const orgName = orgNameInput.value;
     const repoCount = repoCountInput.value;
-    const committerCount = committerCountInput.value;
+    const contributorCount = contributorCountInput.value;
 
     // check validity of the input
-    if (!isValid(orgName, repoCount, committerCount)) {
+    if (!isValid(orgName, repoCount, contributorCount)) {
         errorMessageSpan.innerText = 'One or more input values missing or invalid...';
         return;
     }
@@ -79,7 +85,7 @@ const formSubmitAction = async (event) => {
 
     try {
         // fetch the data
-        let response = await fetch(`/api?org=${orgName}&repo=${repoCount}&committer=${committerCount}`);
+        let response = await fetch(`/api?org=${orgName}&repo=${repoCount}&contributor=${contributorCount}`);
         let isSuccess = response.ok;
         response = await response.json();
         response = JSON.parse(response);
@@ -93,7 +99,7 @@ const formSubmitAction = async (event) => {
         // update the UI
         updateUI(response);
     } catch (error) {
-        // show error
+        // handle error condition
         updateUI([], true, error);
     }
 }
@@ -105,7 +111,7 @@ const documentLoadAction = () => {
     formButton = document.getElementById('form-submit');
     orgNameInput = document.getElementById('org-elem');
     repoCountInput = document.getElementById('repo-elem');
-    committerCountInput = document.getElementById('committer-elem');
+    contributorCountInput = document.getElementById('contributor-elem');
     errorMessageSpan = document.getElementById('error-message');
 
     formButton.addEventListener('click', formSubmitAction);

@@ -6,9 +6,11 @@ const octokit = new Octokit({
 });
 
 // fetch request for repostories of an organisation
-const fetchRepos = (org) => octokit.paginate(`GET /orgs/${org}/repos?per_page=100`, { type: 'public' });
+const fetchRepos = (org) => octokit.paginate(
+    octokit.repos.listForOrg,
+    { org, type: 'public', per_page: 100 });
 
 // fetch request for contributors of given repository
-const fetchCommitters = (org, repo) => octokit.repos.listContributors({ owner: org, repo });
+const fetchContributors = (org, repo) => octokit.repos.listContributors({ owner: org, repo });
 
-module.exports = { fetchRepos, fetchCommitters };
+module.exports = { fetchRepos, fetchContributors };
