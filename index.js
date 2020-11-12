@@ -1,22 +1,13 @@
 require('dotenv').config()
 const express = require('express');
-const fetch = require('node-fetch');
 const path = require('path');
-const { fetchRepos, topReposByForks, fetchCommitters, topCommittersByCommits } = require("./fetchQuery");
-
-
-//octokit.listForOrg()
-//octokit.repos.listForOrg({ org: 'microsoft' }).then(({ data }) => {
-//    // handle data
-//    console.log(data.length)
-//});
-
-
+const { fetchRepos, fetchCommitters } = require('./fetchQueries');
+const { topReposByForks, topCommittersByCommits, checkForError } = require('./utilities');
 
 const app = express();
 app.use('/', express.static(path.join(__dirname, '/static')));
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/static/index.html'));
 });
 
@@ -24,26 +15,34 @@ app.get('/api', async (req, res) => {
     const orgName = req.query.org;
     const repoCount = req.query.repo;
     const committerCount = req.query.committer;
-    const response = []
+    const responseArr = [];
 
-    const data = await fetchRepos(orgName);
-    const repos = topReposByForks(data, repoCount);
-    console.log('repos fetched');
+    try {
+        let response;
 
-    for (repo of repos) {
-        const { data: cdata } = await fetchCommitters(orgName, repo.name);
-        const committers = topCommittersByCommits(cdata, committerCount);
-        response.push({ repo, committers });
+        response = await fetchRepos(orgName);
+        checkForError(response);
+
+        const repos = topReposByForks(response, repoCount);
+        console.log('repos fetched');
+
+        response = await Promise.all(repos.map(repo => fetchCommitters(orgName, repo.name)));
+        checkForError(response);
+
+        const committersData = topCommittersByCommits(response, committerCount);
+        console.log('committers fetched');
+
+        for (let i = 0; i < repos.length; i++) {
+            responseArr.push({ repo: repos[i], committers: committersData[i] });
+        }
+
+        res.status(200).json(JSON.stringify(responseArr));
+    } catch (error) {
+        console.log(error);
+        res.status(400).json(JSON.stringify(error));
     }
-    console.log('committers fetched');
-
-    res.json(JSON.stringify(response));
 });
 
 app.listen(5050, () => {
-    console.log('Server has started running!')
+    console.log('Server has started running!');
 });
-
-//process.on('SIGTERM', ()=>{
-//    app.
-//})

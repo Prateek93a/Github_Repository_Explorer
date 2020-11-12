@@ -5,24 +5,27 @@ let repoCountInput;
 let committerCountInput;
 let errorMessageSpan;
 
-const updateUI = (repos = [], committers = []) => {
+const updateUI = (response = [], hasErrored) => {
+    let uiString = '';
+    if (hasErrored) {
+        uiString += '<h4>Sorry, the request is invalid!</h4>';
+    } else {
+        uiString = response.map(row => {
+            const { repo, committers } = row;
+            let rowString = '<div class="col s12">\n';
+            rowString += `<h4>${repo.name}: #${repo.forks} Forks </h4>\n`;
+            rowString += '<ul>\n';
+            for (committer of committers) {
+                rowString += `<li>${committer.name}: #${committer.commits} Commits</li>\n`
+            }
+            rowString += '</ul>\n';
+            rowString += '</div>';
+            return rowString;
+        }).join('\n');
+    }
+    document.getElementById('response').innerHTML = uiString;
     resultsSection.style.visibility = 'visible';
     formButton.disabled = false;
-    let repoListString = '<ul>';
-    for (let i = 0; i < repos.length; i++) {
-        repoListString += `<li>${repos[i].name}</li>\n`;
-    }
-    repoListString += '</ul>';
-    let committerListString = '<ul>';
-    for (let i = 0; i < committers.length; i++) {
-        committerListString += `<li>${committers[i].name}</li>\n`;
-    }
-    committerListString += '</ul>';
-    console.log(repoListString);
-    document.getElementById('repo-list').innerHTML = repoListString;
-    document.getElementById('committer-list').innerHTML = committerListString;
-    document.getElementById('repo-header').innerText = 'Repositories';
-    document.getElementById('committer-header').innerText = 'Committers';
     formButton.innerText = 'Search';
 }
 
@@ -34,13 +37,19 @@ const formSubmitAction = async (event) => {
     }
     errorMessageSpan.innerText = '';
     formButton.innerText = 'Please wait';
-    let response = await fetch(`/api?org=${orgNameInput.value}&repo=${repoCountInput.value}&committer=${committerCountInput.value}`);
-    response = await response.json();
-    console.log(response);
-    //formButton.disabled = true;
-    //console.log('request submitted');
+    try {
+        let response = await fetch(`/api?org=${orgNameInput.value}&repo=${repoCountInput.value}&committer=${committerCountInput.value}`);
+        response = await response.json();
+        console.log(response);
+        //formButton.disabled = true;
+        //console.log('request submitted');
 
-    //updateUI(repos, committers);
+        updateUI(JSON.parse(response), false);
+    } catch (error) {
+        console.log(error);
+        updateUI([], true);
+    }
+
 }
 
 const documentLoadAction = () => {
