@@ -5,12 +5,6 @@ let repoCountInput;
 let committerCountInput;
 let errorMessageSpan;
 
-const repoQuery = (orgName) => `https://api.github.com/orgs/${orgName}/repos`
-const committerQuery = (orgName) => `https://api.github.com/orgs/${orgName}/repos`
-
-const fetchRepos = (orgName) => fetch(repoQuery(orgName));
-const fetchCommitters = (orgName) => fetch(committerQuery(orgName));
-
 const updateUI = (repos = [], committers = []) => {
     resultsSection.style.visibility = 'visible';
     formButton.disabled = false;
@@ -40,14 +34,12 @@ const formSubmitAction = async (event) => {
     }
     errorMessageSpan.innerText = '';
     formButton.innerText = 'Please wait';
-    await fetch(`/api?org=${orgNameInput.value}&repo=${repoCountInput.value}&committer=${committerCountInput.value}`);
+    let response = await fetch(`/api?org=${orgNameInput.value}&repo=${repoCountInput.value}&committer=${committerCountInput.value}`);
+    response = await response.json();
+    console.log(response);
     //formButton.disabled = true;
     //console.log('request submitted');
 
-    //let repos = await fetchRepos(orgNameInput.value);
-    //repos = await repos.json();
-    //let committers = await fetchCommitters(orgNameInput.value);
-    //committers = await committers.json();
     //updateUI(repos, committers);
 }
 

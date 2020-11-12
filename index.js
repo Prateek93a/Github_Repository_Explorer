@@ -1,6 +1,17 @@
+require('dotenv').config()
 const express = require('express');
 const fetch = require('node-fetch');
 const path = require('path');
+const { fetchRepos, topReposByForks, fetchCommitters, topCommittersByCommits } = require("./fetchQuery");
+
+
+//octokit.listForOrg()
+//octokit.repos.listForOrg({ org: 'microsoft' }).then(({ data }) => {
+//    // handle data
+//    console.log(data.length)
+//});
+
+
 
 const app = express();
 app.use('/', express.static(path.join(__dirname, '/static')));
@@ -13,17 +24,26 @@ app.get('/api', async (req, res) => {
     const orgName = req.query.org;
     const repoCount = req.query.repo;
     const committerCount = req.query.committer;
+    const response = []
 
-    const repoResponse = await fetch(`https://api.github.com/orgs/${orgName}/repos`);
-    const repos = await repoResponse.json();
+    const data = await fetchRepos(orgName);
+    const repos = topReposByForks(data, repoCount);
+    console.log('repos fetched');
 
-    const committerResponse = await fetch(`https://api.github.com//repos/{owner}/{repo}/stats/contributors
-    /${orgName}/repos`);
-    const committers = await committerResponse.json();
+    for (repo of repos) {
+        const { data: cdata } = await fetchCommitters(orgName, repo.name);
+        const committers = topCommittersByCommits(cdata, committerCount);
+        response.push({ repo, committers });
+    }
+    console.log('committers fetched');
 
-    res.send('Done');
+    res.json(JSON.stringify(response));
 });
 
-app.listen(3000, () => {
+app.listen(5050, () => {
     console.log('Server has started running!')
 });
+
+//process.on('SIGTERM', ()=>{
+//    app.
+//})
