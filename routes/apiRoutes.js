@@ -19,6 +19,7 @@ router.get('/', cors(), async (req, res) => {
     }
 
     try {
+        console.log('requests initiated');
         // dummy fetch request for repositories to get total pages
         const dummyResponse = await fetchRepos(orgName);
 
