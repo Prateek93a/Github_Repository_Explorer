@@ -6,7 +6,7 @@ const octokit = new Octokit({
 });
 
 // fetch request for repostories of an organisation
-const fetchRepos = (org, page = 1) => octokit.repos.listForOrg({ org, type: 'public', page });
+const fetchRepos = (org, page = 1) => octokit.repos.listForOrg({ org, type: 'public', per_page: 100 });
 
 // fetch request for contributors of given repository
 const fetchContributors = (org, repo) => octokit.repos.listContributors({ owner: org, repo });
