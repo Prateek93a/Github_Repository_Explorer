@@ -12,7 +12,8 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "install": "yarn",
+    "start": "node index.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
