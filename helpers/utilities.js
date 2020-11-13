@@ -27,17 +27,22 @@ const topContributorsByCommits = (contributors, contributorCount) => {
 
 // utility function to check the validity of request parameters
 const checkIfValid = (orgName, repoCount, contributorCount) => {
-    // checking if some variable is empty
+    // check if some variable is empty
     if (!orgName || !repoCount || !contributorCount) {
         return false;
     }
 
-    // checking if repoCount and contributorCount are valid numbers or not
+    // check if repoCount and contributorCount are valid numbers or not
     if (Number.isNaN(Number(repoCount)) || Number.isNaN(Number(contributorCount))) {
         return false;
     }
 
-    // check if the count is less than or equal to 0
+    // check if the numbers are integers
+    if (!Number.isInteger(repoCount) || !Number.isInteger(contributorCount)) {
+        return false;
+    }
+
+    // check if the numbers are greater than 0
     if (Number(repoCount) <= 0 || Number(contributorCount) <= 0) {
         return false;
     }

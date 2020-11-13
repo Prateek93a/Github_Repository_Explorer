@@ -28,6 +28,11 @@ const isValid = (orgName, repoCount, contributorCount) => {
         return false;
     }
 
+    // check if the numbers are integers
+    if (!Number.isInteger(repoCount) || !Number.isInteger(contributorCount)) {
+        return false;
+    }
+
     return true;
 }
 
