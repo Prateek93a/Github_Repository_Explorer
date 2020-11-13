@@ -15,6 +15,7 @@ router.get('/', cors(), async (req, res) => {
     if (!checkIfValid(orgName, repoCount, contributorCount)) {
         // send bad request status
         res.status(400).json(JSON.stringify({ message: 'Invalid request' }));
+        return;
     }
 
     try {
@@ -56,11 +57,12 @@ router.get('/', cors(), async (req, res) => {
 
         // send a success status with responseArr
         res.status(200).json(JSON.stringify(responseArr));
-
+        return;
     } catch (error) {
         console.log(error);
         // send resource not found status
         res.status(error.status).json(JSON.stringify({ message: error.name }));
+        return;
     }
 });
 

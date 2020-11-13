@@ -38,7 +38,7 @@ const checkIfValid = (orgName, repoCount, contributorCount) => {
     }
 
     // check if the numbers are integers
-    if (!Number.isInteger(repoCount) || !Number.isInteger(contributorCount)) {
+    if (!Number.isInteger(Number(repoCount)) || !Number.isInteger(Number(contributorCount))) {
         return false;
     }
 
