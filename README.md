@@ -20,6 +20,7 @@ While fetching repositories, I have kept the per-page results as 100 instead of 
 Following assumptions were made while building the API.
  - Repository Count(n) and Contributor Count(m) have positive integers as valid values. Negative numbers, 0 and non integers are assumed invalid and result in 400 Error status.
  - Organisation name is assumed to exactly match the name as it is on Github including case and special characters.
+ - If the organisation doesn't have the required number of repositories or if one or more repositories don't have required number of contributors, then whatever number of resources that are available,they are sent.
  
  
 ## Tools and resources used
