@@ -60,7 +60,7 @@ router.get('/', cors(), async (req, res) => {
     } catch (error) {
         console.log(error);
         // send resource not found status
-        res.status(404).json(JSON.stringify({ message: 'Organisation not found' }));
+        res.status(error.status).json(JSON.stringify({ message: error.name }));
     }
 });
 

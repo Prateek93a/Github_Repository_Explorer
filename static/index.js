@@ -94,12 +94,18 @@ const formSubmitAction = async (event) => {
         // fetch the data
         let response = await fetch(url);
         let isSuccess = response.ok;
+        let status = response.status;
         response = await response.json();
         response = JSON.parse(response);
 
         // check if the request was successful
         if (!isSuccess) {
-            const message = `An error has occured: ${response.message}`;
+            let message;
+            if (status == 404) {
+                message = 'Organisation not found';
+            } else {
+                message = `${response.message}`;
+            }
             throw new Error(message);
         }
 
