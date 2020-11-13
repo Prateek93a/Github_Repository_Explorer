@@ -26,7 +26,6 @@ Following assumptions were made while building the API.
 I have the following environment:
  - `node 10.19.0`
  - `yarn 1.22.4`
- - 
 
 Also, I also used [Github Rest API Docs](https://docs.github.com/en/free-pro-team@latest/rest) and [Octokit/Rest API Docs](https://octokit.github.io/rest.js/v18) for reference.
  
