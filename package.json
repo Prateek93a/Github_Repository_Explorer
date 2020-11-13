@@ -12,7 +12,6 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "install": "yarn",
     "start": "node index.js"
   },
   "devDependencies": {
