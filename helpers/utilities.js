@@ -37,7 +37,22 @@ const checkIfValid = (orgName, repoCount, contributorCount) => {
         return false;
     }
 
+    // check if the count is less than or equal to 0
+    if (Number(repoCount) <= 0 || Number(contributorCount) <= 0) {
+        return false;
+    }
+
     return true;
 }
 
-module.exports = { topReposByForks, topContributorsByCommits, checkIfValid };
+// utility function for flattening the 2D response array
+const flatten = (arr) => {
+    arr = arr.map(item => item.data);
+    const flattenArr = [];
+    for (let item of arr) {
+        flattenArr.push(...item);
+    }
+    return flattenArr;
+}
+
+module.exports = { topReposByForks, topContributorsByCommits, checkIfValid, flatten };

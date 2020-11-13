@@ -23,7 +23,11 @@ const isValid = (orgName, repoCount, contributorCount) => {
         return false;
     }
 
-    // repoCount and contributorCount are numbers because the input type of html element is number
+    // check if the count is less than or equal to 0
+    if (Number(repoCount) <= 0 || Number(contributorCount) <= 0) {
+        return false;
+    }
+
     return true;
 }
 

@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const { fetchRepos, fetchContributors } = require('./helpers/fetchQueries');
-const { topReposByForks, topContributorsByCommits, checkIfValid } = require('./helpers/utilities');
+const { topReposByForks, topContributorsByCommits, checkIfValid, flatten } = require('./helpers/utilities');
 
 
 // setting up express app
@@ -22,23 +22,30 @@ app.get('/api', cors(), async (req, res) => {
     const repoCount = req.query.repo;
     const contributorCount = req.query.contributor;
 
-    // for sending response
-    const responseArr = [];
-
-    // for handling errors
-    let errorMessage;
 
     // check if the request parameters are valid
     if (!checkIfValid(orgName, repoCount, contributorCount)) {
-        errorMessage = 'Invalid request';
-
         // send bad request status
-        res.status(400).json(JSON.stringify({ message: errorMessage }));
+        res.status(400).json(JSON.stringify({ message: 'Invalid request' }));
     }
 
     try {
-        // fetch all repositories of the organisation
-        const repositories = await fetchRepos(orgName);
+        // dummy fetch request for repositories to get total pages
+        const dummyResponse = await fetchRepos(orgName);
+
+        // extract total pages from response header
+        const totalPages = parseInt(dummyResponse.headers.link.split(' ')[2].split('&page=')[1]);
+
+        // array to hold promises for fetch requests of repositories per page
+        const repoPerPagePromiseArr = [];
+
+        // fetch request for repositories per page
+        for (let i = 1; i <= totalPages; i++) {
+            repoPerPagePromiseArr.push(fetchRepos(orgName, i));
+        }
+
+        // promise resolution and flattening of the response array to get all the repositories
+        const repositories = flatten(await Promise.all(repoPerPagePromiseArr));
 
         // sort the repositories and fetch the top repositories based on fork count
         const topRepositories = topReposByForks(repositories, repoCount);
@@ -51,21 +58,24 @@ app.get('/api', cors(), async (req, res) => {
         const topContributorsPerRepo = topContributorsByCommits(contributorsPerRepo, contributorCount);
         console.log('contributors fetched');
 
+        // for sending response
+        const responseArr = [];
+
         // zip repository with corresponding contributors together and push into responseArr
         for (let i = 0; i < topRepositories.length; i++) {
             responseArr.push({ repo: topRepositories[i], contributors: topContributorsPerRepo[i] });
         }
 
+        // send a success status with responseArr
         res.status(200).json(JSON.stringify(responseArr));
 
     } catch (error) {
-        errorMessage = 'Organisation not found';
-
         // send resource not found status
-        res.status(404).json(JSON.stringify({ message: errorMessage }));
+        res.status(404).json(JSON.stringify({ message: 'Organisation not found' }));
     }
 });
 
+// start the server
 app.listen(process.env.PORT || 5050, () => {
     console.log('Server has started running!');
 });

@@ -5,15 +5,13 @@ body{
 }
 
 .navbar{
-    height: 8vh;
+    height: 9vh;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    z-index: 0 !important;
 }
 
 .form{
     height: 15vh;
-    background-color: beige;
     padding-top: 6vh;
     padding-bottom: 2vh;
 }
@@ -25,7 +23,7 @@ body{
     border-color: rgb(58, 58, 58);
 }
 
-.form .input-text{
+.form .text-input .text-input:focus .text-input:focus:active{
     margin-right: 20px;
     border-bottom: none !important;
 }
