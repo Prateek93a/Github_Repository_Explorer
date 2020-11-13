@@ -88,8 +88,11 @@ const formSubmitAction = async (event) => {
     formButton.classList.add('disabled');
 
     try {
+        // api url
+        const url = `/api?org_name=${orgName}&repo_count=${repoCount}&contributor_count=${contributorCount}`;
+
         // fetch the data
-        let response = await fetch(`/api?org=${orgName}&repo=${repoCount}&contributor=${contributorCount}`);
+        let response = await fetch(url);
         let isSuccess = response.ok;
         response = await response.json();
         response = JSON.parse(response);

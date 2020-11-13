@@ -18,9 +18,9 @@ app.get('/', (req, res) => {
 // api for fetching the data
 app.get('/api', cors(), async (req, res) => {
     // extract request parameters
-    const orgName = req.query.org;
-    const repoCount = req.query.repo;
-    const contributorCount = req.query.contributor;
+    const orgName = req.query.org_name;
+    const repoCount = req.query.repo_count;
+    const contributorCount = req.query.contributor_count;
 
 
     // check if the request parameters are valid
@@ -70,6 +70,7 @@ app.get('/api', cors(), async (req, res) => {
         res.status(200).json(JSON.stringify(responseArr));
 
     } catch (error) {
+        console.log(error);
         // send resource not found status
         res.status(404).json(JSON.stringify({ message: 'Organisation not found' }));
     }

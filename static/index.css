@@ -18,13 +18,13 @@ body{
 
 .form .input-div{
     border-style: solid !important;
-    border-radius: 4%;
+    border-radius: 5px;
     border-width: thin;
     border-color: rgb(58, 58, 58);
+    margin-right: 2px;
 }
 
 .form .text-input .text-input:focus .text-input:focus:active{
-    margin-right: 20px;
     border-bottom: none !important;
 }
 
